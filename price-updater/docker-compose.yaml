@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  notifier:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "crypto-updater"
+    restart: always
+    volumes:
+      - /opt/crypto-updater/artifacts:/app/artifacts:rw
+      - /opt/crypto-updater/sa:/app/sa:rw
+      - /var/log/crypto-updater:/app/log:rw
+

@@ -1,0 +1,14 @@
+__pycache__/
+*-venv
+*.yaml
+*.yml
+log/
+*.log
+.DS_Store
+.env
+service_account.json
+sa/
+artifacts/
+
+
+
