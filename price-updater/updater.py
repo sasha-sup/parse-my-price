@@ -55,13 +55,9 @@ def write_prices_to_sheet(data, sheet_name, worksheet_name):
         gc = gspread.service_account(filename="./sa/service_account.json")
         sh = gc.open(sheet_name)
         ws = sh.worksheet(worksheet_name)
-        next_row = len(ws.col_values(2)) + 1
-        for coin, price in data.items():
-            ws.append_row(
-                [coin, price],
-                value_input_option="RAW",
-                insert_data_option="INSERT_ROWS",
-            )
+        cell_range = f"A1:B{len(data) + 1}"
+        values = [[coin, price] for coin, price in data.items()]
+        ws.update(cell_range, values, value_input_option="RAW")
         logger.info(f"Successfully wrote data to {sheet_name} --> {worksheet_name}")
     except Exception as e:
         logger.error(
@@ -77,4 +73,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    time.sleep(1800)
     exit()
