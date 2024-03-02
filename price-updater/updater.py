@@ -57,7 +57,7 @@ def write_prices_to_sheet(data, sheet_name, worksheet_name):
         ws = sh.worksheet(worksheet_name)
         cell_range = f"A1:B{len(data) + 1}"
         values = [[coin, price] for coin, price in data.items()]
-        ws.update(cell_range, values, value_input_option="RAW")
+        ws.update(range_name=cell_range, values=values, value_input_option="RAW")
         logger.info(f"Successfully wrote data to {sheet_name} --> {worksheet_name}")
     except Exception as e:
         logger.error(
@@ -69,9 +69,9 @@ def main():
     prices = boost_my_price(config.URLS, config.URL_CLASS)
     write_prices_to_file(prices)
     write_prices_to_sheet(prices, "Finance-list", "CryptoPrices")
+    logger.info(f"Next update in 30 min.")
+    time.sleep(1800)
 
 
 if __name__ == "__main__":
     main()
-    time.sleep(1800)
-    exit()
