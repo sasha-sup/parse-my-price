@@ -5,3 +5,4 @@ __pycache__
 *.log
 crypto-prices.txt
 service_account.json
+push-localhub.sh

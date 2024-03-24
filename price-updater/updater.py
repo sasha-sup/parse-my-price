@@ -3,6 +3,7 @@ import time
 import os
 import requests
 import config
+import sys
 from logger import logger
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
@@ -66,12 +67,10 @@ def write_prices_to_sheet(data, sheet_name, worksheet_name):
 
 
 def main():
-    prices = boost_my_price(config.URLS, config.URL_CLASS)
-    write_prices_to_file(prices)
+    prices = boost_my_price(config.URLS, config.URL_CLASS)    
+#    write_prices_to_file(prices)
     write_prices_to_sheet(prices, "Finance-list", "CryptoPrices")
-    logger.info(f"Next update in 30 min.")
-    time.sleep(1800)
-
+    sys.exit() 
 
 if __name__ == "__main__":
     main()

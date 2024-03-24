@@ -1,18 +1,15 @@
 import logging
 import os
-
-log_dir = "./log"
-log_name = os.getcwd()
-log_filename = os.path.basename(log_name)
-
-os.makedirs(log_dir, exist_ok=True)
+import sys
 
 log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
-logging.basicConfig(
-    format=log_format,
-    level=logging.INFO,
-    filename=os.path.join(log_dir, log_filename + ".log"),
-)
+root_logger = logging.getLogger()
+root_logger.handlers = []
+
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setLevel(logging.INFO)
+stdout_handler.setFormatter(logging.Formatter(log_format))
+root_logger.addHandler(stdout_handler)
 
 logger = logging.getLogger("Crypto Price Updater")
