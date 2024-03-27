@@ -71,7 +71,7 @@ def write_prices_to_sheet(data, sheet_name, worksheet_name):
 
 def main():
     prices = boost_my_price(config.URLS, config.URL_CLASS)    
-#    write_prices_to_file(prices)
+    write_prices_to_file(prices)
     write_prices_to_sheet(prices, "Finance-list", "CryptoPrices")
     sys.exit() 
 
