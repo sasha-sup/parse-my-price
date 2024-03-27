@@ -1,0 +1,51 @@
+name: Zaubumba Siyay ans Sidi
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'price-updater/**'
+
+jobs:
+  gitguardian_scan:
+    name: GitGuardian scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: GitGuardian scan
+        uses: GitGuardian/ggshield-action@v1.26.0
+        env:
+          GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
+          GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
+          GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+
+  build_price_updater_image:
+    name: Build price-updater Image
+    runs-on: ubuntu-latest
+    needs: gitguardian_scan 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Insecure Docker Repository
+        run: |
+          sudo truncate -s-2 /etc/docker/daemon.json
+          echo ", \"insecure-registries\": [\"${{ secrets.REGISTRY_URL }}\"]}" | sudo tee -a /etc/docker/daemon.json
+          sudo systemctl restart docker
+
+      - name: Login to Docker registry
+        run: echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin ${{ secrets.REGISTRY_URL }}
+      
+      - name: Build and tag price-updater Docker image
+        run: |
+          docker build . --file Dockerfile --tag crypto-price-update:stable
+          docker tag crypto-price-update:stable ${{ secrets.REGISTRY_URL }}/crypto-price-update:stable
+      - name: Push Docker image to registry
+        run: docker push ${{ secrets.REGISTRY_URL }}/aki-bot-core:stable
+    
