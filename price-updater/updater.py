@@ -1,5 +1,6 @@
 import gspread
 import time
+from datetime import datetime
 import os
 import requests
 import config
@@ -56,7 +57,9 @@ def write_prices_to_sheet(data, sheet_name, worksheet_name):
         gc = gspread.service_account(filename="./sa/service_account.json")
         sh = gc.open(sheet_name)
         ws = sh.worksheet(worksheet_name)
-        cell_range = f"A1:B{len(data) + 1}"
+        dt_string = datetime.now().astimezone().strftime("%Y-%m-%dT%H:%M:%S %Z")
+        ws.update_cell(1,1, dt_string)
+        cell_range = f"A2:B{len(data) + 1}"
         values = [[coin, price] for coin, price in data.items()]
         ws.update(range_name=cell_range, values=values, value_input_option="RAW")
         logger.info(f"Successfully wrote data to {sheet_name} --> {worksheet_name}")
