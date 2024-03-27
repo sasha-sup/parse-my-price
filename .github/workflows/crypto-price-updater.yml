@@ -44,7 +44,7 @@ jobs:
 
       - name: Build and tag price-updater Docker image
         run: |
-          docker build . --file Dockerfile --tag crypto-price-update:stable
+          docker build . --file price-updater/Dockerfile --tag crypto-price-update:stable
           docker tag crypto-price-update:stable ${{ secrets.REGISTRY_URL }}/crypto-price-update:stable
 
       - name: Push Docker image to registry
