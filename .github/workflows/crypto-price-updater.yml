@@ -3,7 +3,7 @@ name: Zaubumba Siyay ans Sidi
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'price-updater/**'
 
@@ -41,11 +41,12 @@ jobs:
 
       - name: Login to Docker registry
         run: echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin ${{ secrets.REGISTRY_URL }}
-      
+
       - name: Build and tag price-updater Docker image
         run: |
           docker build . --file Dockerfile --tag crypto-price-update:stable
           docker tag crypto-price-update:stable ${{ secrets.REGISTRY_URL }}/crypto-price-update:stable
+
       - name: Push Docker image to registry
         run: docker push ${{ secrets.REGISTRY_URL }}/aki-bot-core:stable
     
