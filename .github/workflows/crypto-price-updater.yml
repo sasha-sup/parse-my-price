@@ -44,9 +44,9 @@ jobs:
 
       - name: Build and tag price-updater Docker image
         run: |
-          ls
-          #docker build . --file price-updater/Dockerfile --tag crypto-price-update:stable
-          #docker tag crypto-price-update:stable ${{ secrets.REGISTRY_URL }}/crypto-price-update:stable
+          cd price-updater
+          docker build . --file Dockerfile --tag crypto-price-update:stable
+          docker tag crypto-price-update:stable ${{ secrets.REGISTRY_URL }}/crypto-price-update:stable
 
       - name: Push Docker image to registry
         run: docker push ${{ secrets.REGISTRY_URL }}/aki-bot-core:stable
