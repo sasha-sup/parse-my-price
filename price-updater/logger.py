@@ -1,15 +1,15 @@
 import logging
-import os
-import sys
+import logging_loki
+from loki_conf import LOKI_URL
 
-log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+handler = logging_loki.LokiHandler(
+    url=f"{LOKI_URL}/loki/api/v1/push",
+    tags={"app": "crypto-price-updater"},
+    version="1",
+)
 
-root_logger = logging.getLogger()
-root_logger.handlers = []
+logger = logging.getLogger("my-logger")
 
-stdout_handler = logging.StreamHandler(sys.stdout)
-stdout_handler.setLevel(logging.INFO)
-stdout_handler.setFormatter(logging.Formatter(log_format))
-root_logger.addHandler(stdout_handler)
 
-logger = logging.getLogger("Crypto Price Updater")
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)

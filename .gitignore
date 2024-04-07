@@ -6,3 +6,5 @@ __pycache__
 crypto-prices.txt
 service_account.json
 push-localhub.sh
+artifacts
+loki_conf.py

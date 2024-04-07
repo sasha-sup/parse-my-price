@@ -22,7 +22,10 @@ def get_price(url, url_class):
                     price = price_element.text.strip().replace("$", "")
                     return coin, price
     except Exception as e:
-        logger.error(f"Error in get_price for {coin}: {e}")
+        logger.error(
+            f"Error in get_price for {coin}: {e}",
+            extra={"tags": {"Cripto-Price-Updater": "fetch-price"}},
+        )
     return None, None
 
 
@@ -44,10 +47,15 @@ def write_prices_to_file(prices):
     file_name = "crypto_prices.txt"
     os.makedirs(dir_name, exist_ok=True)
     file_path = os.path.join(dir_name, file_name)
+    dt_string = datetime.now().astimezone().strftime("%Y-%m-%dT%H:%M:%S %Z")
     with open(file_path, "w") as file:
+        file.write(f"{dt_string}\n")
         for coin, price in sorted(prices.items()):
             file.write(f"{coin} : {price}\n")
-    logger.info(f"Successfully wrote data to {file_path}")
+    logger.info(
+        f"Successfully wrote data to {file_path}",
+        extra={"tags": {"Cripto-Price-Updater": "file-writer"}},
+    )
 
 
 def write_prices_to_sheet(data, sheet_name, worksheet_name):
@@ -58,22 +66,27 @@ def write_prices_to_sheet(data, sheet_name, worksheet_name):
         sh = gc.open(sheet_name)
         ws = sh.worksheet(worksheet_name)
         dt_string = datetime.now().astimezone().strftime("%Y-%m-%dT%H:%M:%S %Z")
-        ws.update_cell(1,1, dt_string)
+        ws.update_cell(1, 1, dt_string)
         cell_range = f"A2:B{len(data) + 1}"
         values = [[coin, price] for coin, price in data.items()]
         ws.update(range_name=cell_range, values=values, value_input_option="RAW")
-        logger.info(f"Successfully wrote data to {sheet_name} --> {worksheet_name}")
+        logger.info(
+            f"Successfully wrote data to {sheet_name} --> {worksheet_name}",
+            extra={"tags": {"Cripto-Price-Updater": "sheet-writer"}},
+        )
     except Exception as e:
         logger.error(
-            f"Error occurred while writing data to {sheet_name} --> {worksheet_name}: {e}"
+            f"Error occurred while writing data to {sheet_name} --> {worksheet_name}: {e}",
+            extra={"tags": {"Cripto-Price-Updater": "sheet-writer"}},
         )
 
 
 def main():
-    prices = boost_my_price(config.URLS, config.URL_CLASS)    
+    prices = boost_my_price(config.URLS, config.URL_CLASS)
     write_prices_to_file(prices)
     write_prices_to_sheet(prices, "Finance-list", "CryptoPrices")
-    sys.exit() 
+    sys.exit()
+
 
 if __name__ == "__main__":
     main()
