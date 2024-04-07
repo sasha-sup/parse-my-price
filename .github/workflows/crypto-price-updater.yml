@@ -28,7 +28,7 @@ jobs:
   build_price_updater_image:
     name: Build price-updater Image
     runs-on: ubuntu-latest
-    needs: gitguardian_scan 
+    needs: gitguardian_scan
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,8 +44,9 @@ jobs:
 
       - name: Build and tag price-updater Docker image
         run: |
-          docker build . --file price-updater/Dockerfile --tag crypto-price-update:stable
-          docker tag crypto-price-update:stable ${{ secrets.REGISTRY_URL }}/crypto-price-update:stable
+          ls
+          #docker build . --file price-updater/Dockerfile --tag crypto-price-update:stable
+          #docker tag crypto-price-update:stable ${{ secrets.REGISTRY_URL }}/crypto-price-update:stable
 
       - name: Push Docker image to registry
         run: docker push ${{ secrets.REGISTRY_URL }}/aki-bot-core:stable
