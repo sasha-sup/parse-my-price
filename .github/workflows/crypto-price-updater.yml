@@ -49,5 +49,5 @@ jobs:
           docker tag crypto-price-update:stable ${{ secrets.REGISTRY_URL }}/crypto-price-update:stable
 
       - name: Push Docker image to registry
-        run: docker push ${{ secrets.REGISTRY_URL }}/aki-bot-core:stable
+        run: docker push ${{ secrets.REGISTRY_URL }}/crypto-price-update:stable
     
