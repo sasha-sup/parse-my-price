@@ -50,4 +50,3 @@ jobs:
 
       - name: Push Docker image to registry
         run: docker push ${{ secrets.REGISTRY_URL }}/crypto-price-update:stable
-    
