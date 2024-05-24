@@ -11,6 +11,6 @@ URLS = [
 ]
 
 URL_CLASS = [
-    "sc-f70bb44c-0 jxpCgO base-text",
-    "sc-f70bb44c-0 eZIItc base-text",  # for shiba-inu
+    "sc-d1ede7e3-0 fsQm base-text",
+    "sc-d1ede7e3-0 hSTakI base-text",  # for shiba-inu
 ]
